@@ -7,13 +7,9 @@ public class DraggableDefault {
 
 	
 	
-	@FindBy(id = "#draggable")
+	@FindBy(id = "draggable")
 	WebElement draggableSquare;
 	
-	public WebElement dragDefaultSquare() {
-		draggableSquare.click();
-		return draggableSquare;
-	}
 	
 	
 }
