@@ -32,7 +32,7 @@ public class Draggable {
 	private Actions builder;
 	private DraggableDefault draggableDefault;
 	private ConstrainMovement constrainMovement;
-	
+	private CursorStyle cursorStylePage;
 	
 	@BeforeClass	
 	public static void init() {
@@ -214,6 +214,96 @@ public class Draggable {
 			test.addScreenCaptureFromPath(ScreenShot.take(webDriver, "FailureWithinParentDrag"));
 			e.printStackTrace();
 		}
+			
+		
+	}
+	
+	@Test
+	public void cursorStyleTest() throws IOException {
+		
+		// Cursor Style tests
+		
+		cursorStylePage = PageFactory.initElements(webDriver, CursorStyle.class);
+		ExtentTest test = report.createTest("Cursor style test");
+		webDriver.navigate().to(url);		
+		
+		try {
+			cursorStylePage.navigateToCursorStyle();
+			test.log(Status.INFO, "Navigated to cursor style exercise section");
+		} catch (Exception e) {
+			test.log(Status.ERROR, "Navigation was unsuccessful");
+			e.printStackTrace();
+		}
+		
+		Point cursorTopLeftInitial = cursorStylePage.cursorStyleTopLeft.getLocation();
+		
+		
+		try {
+			builder.clickAndHold(cursorStylePage.cursorStyleTopLeft).moveByOffset(180, 150).release().perform();
+			test.log(Status.INFO, "");
+		} catch (Exception e) {
+			test.log(Status.ERROR, "");
+			e.printStackTrace();
+		}
+		
+		Point cursorStyleTopLeftPosition = cursorStylePage.cursorStyleTopLeft.getLocation();
+		System.out.println(cursorStyleTopLeftPosition);
+		
+		int a = cursorTopLeftInitial.x;
+		int b = cursorTopLeftInitial.y;
+		
+		int x = cursorStyleTopLeftPosition.x;
+		int y = cursorStyleTopLeftPosition.y;
+		Point cursorStyleModified = new Point(x - 55, y - 55);
+		Point cursorToCompare = new Point(a + 180, b + 150);
+		
+		
+		try {
+			Assert.assertEquals(cursorToCompare, cursorStyleModified);
+			test.log(Status.PASS, "Object dragged within the box successfully");
+			test.addScreenCaptureFromPath(ScreenShot.take(webDriver, "Successfully compared"));
+		} catch (Exception e) {
+			test.log(Status.FAIL, "Object did not drag successfully");
+			test.addScreenCaptureFromPath(ScreenShot.take(webDriver, "Failure to compare the cursor element"));
+			e.printStackTrace();
+		}
+		
+		// Cursor center alignmen
+		
+		Point cursorStyleCenterInitial = cursorStylePage.cursorStyleCenter.getLocation();
+		
+		try {
+			builder.clickAndHold(cursorStylePage.cursorStyleCenter).moveByOffset(100, 100).release().perform();
+			test.log(Status.INFO, "");
+		} catch (Exception e) {
+			test.log(Status.ERROR, "");
+			e.printStackTrace();
+		}
+		
+		Point cursorStyleCenterPosition = cursorStylePage.cursorStyleCenter.getLocation();
+		System.out.println(cursorStyleTopLeftPosition);
+		
+	
+		int a1 = cursorStyleCenterInitial.x;
+		int b1 = cursorStyleCenterInitial.y;
+		
+		int x1 = cursorStyleCenterPosition.x;
+		int y1 = cursorStyleCenterPosition.y;
+		
+		Point cursorStyleActual = new Point(x1 -100, y1 - 100);
+		Point cursorToCompareCenter = new Point(a1 + 44, b1 + 44);
+		
+		
+		try {
+			Assert.assertEquals(cursorToCompareCenter, cursorStyleActual);
+			test.log(Status.PASS, "Object dragged within the box successfully");
+			test.addScreenCaptureFromPath(ScreenShot.take(webDriver, "Successfully compared"));
+		} catch (Exception e) {
+			test.log(Status.FAIL, "Object did not drag successfully");
+			test.addScreenCaptureFromPath(ScreenShot.take(webDriver, "Failure to compare the cursor element"));
+			e.printStackTrace();
+		}
+		
 		
 		
 		
