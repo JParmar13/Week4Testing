@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -286,7 +287,7 @@ public class ShoppingIndex {
 	public void AddToCartTest() throws InterruptedException, IOException {
 
 		SpreadSheetReader ssReader = new SpreadSheetReader("shoppingspreadsheet.xlsx");
-		ExtentTest test = report.createTest("First run of shopping page");
+		ExtentTest test = report.createTest("Add to cart test");
 		webDriver.navigate().to(url);
 		addToCartPage = PageFactory.initElements(webDriver, AddToCart.class);
 		String additionalComment = "I hope my products are swiftly and safely, thank you for your time and service!";
@@ -307,7 +308,7 @@ public class ShoppingIndex {
 			e1.printStackTrace();
 		}
 
-		
+		Thread.sleep(3000);
 		try {
 			addToCartPage.proceedToCartSummary();
 			test.log(Status.INFO, "Navigate to cart summary");
@@ -371,14 +372,19 @@ public class ShoppingIndex {
 			test.log(Status.ERROR, "Failed to select payment method");
 			e.printStackTrace();
 		}
+		
+		Thread.sleep(5000);
 
-		String expected = addToCartPage.orderComplete.getText();
-		String actual = "Your order on My Store is complete";
+	
 		
 		
 		
 		try {
 			addToCartPage.confirmCart();
+			
+			String actual = addToCartPage.orderComplete.getText();
+			System.out.println(actual);
+			String expected = "Your order on My Store is complete";
 			assertEquals(expected, actual);
 			test.log(Status.PASS, "Successfully purchased T-shirt!");
 			test.addScreenCaptureFromPath(ScreenShot.take(webDriver, "SuccessfulCartPurchase"));
@@ -409,13 +415,14 @@ public class ShoppingIndex {
 		
 		
 		
+		
 	}
 
-//	 @After
-//	 public void tearDown() {
-//	 webDriver.quit();
-//	
-//	 }
+	 @After
+	 public void tearDown() {
+	 webDriver.quit();
+	
+	 }
 
 	@AfterClass
 	public static void cleanUp() {
